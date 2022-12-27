@@ -849,6 +849,9 @@ app.post("/revokeCar", function (request, response) {
              where date = "${date}" and car_id ="${id}";`
           );
         }
+
+        request.session?.loggedin && request.session.limit++;
+
         response.sendStatus(200);
       } catch (error) {
         console.log(error);
@@ -927,6 +930,8 @@ app.post("/returnCar", function (request, response) {
              where date = "${date}" and car_id ="${id}";`
           );
         }
+        request.session?.loggedin && request.session.limit++;
+
         response.sendStatus(200);
       } catch (error) {
         console.log(error);
