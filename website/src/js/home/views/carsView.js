@@ -108,12 +108,12 @@ class CarsView {
 
     //prettier-ignore
     return `
-        <div class = "card" data-car-id ="${car.carId}" data-region="${car.region}">
+        <div class = "card" data-car-id ="${car.car_id}" data-region="${car.region}">
             <div class="card-header">
               <h3 class="car-brand">${brand} ${car.model.toUpperCase()}</h3>
               <div></div>
 
-              <span class="car-type">${
+              <span class="car-type">${car.type.length<4?car.type.toUpperCase():
                 car.type[0].toUpperCase() + car.type.slice(1).toLowerCase()
               }</span>
             </div>
@@ -388,7 +388,7 @@ class CarsView {
       const html = `
     <div class="payment ${payment.status ? "paid" : ""}" data-order-id="${
         payment.orderId
-      }" data-car-id="${payment.carId}">
+      }" data-car-id="${payment.car_id}">
         <div class="pay-car">${brand + " " + payment.model.toUpperCase()}</div>
         <div class="pay-rate"><span class="pay-sub">rate/day</span>$${
           payment.rate

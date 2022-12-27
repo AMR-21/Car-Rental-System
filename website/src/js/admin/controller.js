@@ -196,6 +196,7 @@ const filter = function () {
       return;
     }
 
+    console.log(filter[1]);
     if (filter[0] === "region" && filter[1] && filter[1] != "-") {
       queryRes.push(
         ...data.filter((car) => car.cca2 === filter[1].toUpperCase())
@@ -409,6 +410,10 @@ const handleForm = function () {
       const res = await model.addCar(car);
       if (res) {
         showAlert("Car added successfully");
+        await model.adminGetData();
+        const countries = await model.getCountries();
+        filterView.initUI(countries);
+        addFilters();
         active = "cars";
         tableView.toggle();
         searchView.toggle();

@@ -311,17 +311,16 @@ const init = async () => {
 
 const addCCA = (data) => {
   data.forEach((car) => {
-    let country = countries.find(
-      (c) =>
-        c.name.common ===
-        car.region[0].toUpperCase() + car.region.slice(1).toLowerCase()
+    console.log(car.region);
+    let country = countries.find((c) =>
+      c.name.common.toLowerCase().includes(car.region.toLowerCase())
     );
 
     if (!country)
       country = countries.find((c) => c.cca3 === car.region.toUpperCase());
 
-    car.cca2 = country.cca2;
-    car.cca3 = country.cca3;
+    car.cca2 = country?.cca2;
+    car.cca3 = country?.cca3;
   });
 };
 
