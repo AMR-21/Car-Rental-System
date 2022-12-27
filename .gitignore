@@ -9,3 +9,4 @@ temp
 keys
 .terraform
 providers
+random_data.js

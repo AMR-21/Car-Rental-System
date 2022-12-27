@@ -41,6 +41,21 @@ const init = async () => {
     .querySelector(".btn-signout")
     .addEventListener("click", model.signOut.bind(null));
 
+  const d = new Date();
+  const date = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+
+  const pick = document.querySelector("#pickup-date");
+  const drop = document.querySelector("#drop-off-date");
+  pick.min = drop.min = date;
+
+  pick.addEventListener("input", () => {
+    drop.min = pick.value;
+  });
+
+  drop.addEventListener("input", () => {
+    pick.max = drop.value;
+  });
+
   handleView();
   handleForm();
 };
@@ -67,7 +82,7 @@ const handleForm = function () {
     [...formData.entries()].forEach(
       (entry) => (reserveData[entry[0]] = entry[1])
     );
-    reserveData.carId = activeCar.carId;
+    reserveData.car_id = activeCar.car_id;
 
     info.classList.add("z-n");
     showConfirmation(
@@ -150,13 +165,14 @@ const showAlert = function (message, flag = true) {
 const handleView = function () {
   document.querySelectorAll(".btn-view").forEach((btn) => {
     const id = btn.closest(".card").dataset.carId;
+    const order = btn.dataset.resId;
 
     btn.addEventListener("click", () => {
       document.querySelector("#action").classList.add("hide");
 
       carsView.setModal();
 
-      activeCar = getActiveData().filter((c) => c.carId === id)[0];
+      activeCar = getActiveData().filter((c) => c.car_id === id)[0];
 
       carsView.renderCarView(activeCar, active);
 
@@ -193,13 +209,13 @@ const handleView = function () {
 
         document
           .querySelector(".btn-revoke")
-          .addEventListener("click", revokeHandler.bind(null, id));
+          .addEventListener("click", revokeHandler.bind(null, id, order));
       }
 
       if (active === "rented") {
         document
           .querySelector(".btn-return")
-          .addEventListener("click", returnHandler.bind(null, id));
+          .addEventListener("click", returnHandler.bind(null, id, order));
       }
     });
   });
@@ -260,7 +276,7 @@ const filter = function () {
 
     if (filter[0] === "region" && filter[1] && filter[1] != "-") {
       queryRes.push(
-        ...data.filter((car) => car.cca2 === filter[1].toLowerCase())
+        ...data.filter((car) => car.cca2 === filter[1].toUpperCase())
       );
 
       if (flag) result = result.filter((value) => queryRes.includes(value));
@@ -344,10 +360,9 @@ const reset = function () {
       .classList.remove("rotate");
   });
 
+  filtered = false;
   renderState();
   handleView();
-
-  filtered = false;
 };
 
 const renderState = function () {
@@ -452,7 +467,7 @@ const pickHandler = async function (id) {
   info.classList.remove("z-n");
 };
 
-const revokeHandler = async function (id) {
+const revokeHandler = async function (id, order) {
   info.classList.add("z-n");
   showConfirmation(
     "confirm revoke",
@@ -461,7 +476,7 @@ const revokeHandler = async function (id) {
   );
   let res = await confirm.then((ev) => true).catch((e) => false);
   if (res) {
-    res = await model.revokeCar(id);
+    res = await model.revokeCar(id, order);
     $("#car-info").modal("hide");
     if (res) {
       showAlert("Car revoke was completed successfully");
@@ -476,11 +491,13 @@ const reserveHandler = async function (info) {
   $("#car-info").modal("hide");
   if (res) {
     showAlert("Car reservation was completed successfully");
-    renderState();
-  } else showAlert("Car reservation failed", false);
+  } else {
+    showAlert("Car reservation failed", false);
+  }
+  renderState();
 };
 
-const returnHandler = async function (id) {
+const returnHandler = async function (id, order) {
   info.classList.add("z-n");
   showConfirmation(
     "confirm return",
@@ -491,7 +508,7 @@ const returnHandler = async function (id) {
   let res = await confirm.then((ev) => true).catch((e) => false);
 
   if (res) {
-    res = await model.returnCar(id);
+    res = await model.returnCar(id, order);
     $("#car-info").modal("hide");
     if (res) {
       showAlert("Car return was completed successfully");

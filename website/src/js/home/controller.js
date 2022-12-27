@@ -34,7 +34,7 @@ const init = async () => {
     );
 
   document
-    .querySelector(".btn-singIn")
+    .querySelector(".btn-signIn")
     .addEventListener("click", () => (window.location = `${SERVER_URL}/logIn`));
   handleView();
 };

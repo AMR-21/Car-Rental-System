@@ -65,7 +65,7 @@ const showAlert = async function (message, flag = true) {
     );
 
     setTimeout(() => {
-      window.location = `${SERVER_URL}/`;
+      window.location = `${SERVER_URL}/logIn`;
     }, 3100);
   });
 })();
@@ -92,4 +92,4 @@ document.querySelector("footer").innerHTML = `
 
 document
   .querySelector(".btn-outline-primary")
-  .addEventListener("click", () => (window.location = `${SERVER_URL}/`));
+  .addEventListener("click", () => (window.location = `${SERVER_URL}/logIn`));

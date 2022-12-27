@@ -63,21 +63,36 @@ const init = async () => {
 const handleView = function () {
   document.querySelectorAll(".btn-view").forEach((btn) => {
     const id = btn.dataset.carId;
+    const order = btn.dataset.resId;
+    const cust = btn.dataset.custId;
 
     btn.addEventListener("click", () => {
-      activeCar = getActiveData().find((c) => c.carId === id);
-
-      tableView.renderCarView(activeCar, active);
+      if (
+        active === "reservations" ||
+        activeCat === "reserved" ||
+        activeCat === "rented"
+      ) {
+        activeCar = getActiveData().find(
+          (c) => c.car_id === id && c.res_id === order
+        );
+        tableView.renderCarView(activeCar, active);
+      } else {
+        activeCar = getActiveData().find((c) => c.car_id === id);
+        tableView.renderCarView(activeCar, active);
+      }
 
       if (active === "cars" || active === "reservations") {
         let btn = document.querySelector(".btn-return");
         if (btn) {
-          btn.addEventListener("click", returnHandler.bind(null, id));
+          btn.addEventListener(
+            "click",
+            returnHandler.bind(null, id, order, cust)
+          );
         }
 
         btn = document.querySelector(".btn-revoke");
         if (btn) {
-          btn.addEventListener("click", revokeHandler.bind(null, id));
+          btn.addEventListener("click", revokeHandler.bind(null, id, order));
         }
 
         btn = document.querySelector(".btn-suspend");
@@ -155,8 +170,7 @@ const getActiveData = () => {
 
   if (active === "customers") return model.state.users;
 
-  if (active === "reservations")
-    return [...model.state.reserved, ...model.state.rented];
+  if (active === "reservations") return model.state.reservations;
 
   if (active === "status") return model.state.daily;
 
@@ -184,7 +198,7 @@ const filter = function () {
 
     if (filter[0] === "region" && filter[1] && filter[1] != "-") {
       queryRes.push(
-        ...data.filter((car) => car.cca2 === filter[1].toLowerCase())
+        ...data.filter((car) => car.cca2 === filter[1].toUpperCase())
       );
 
       if (flag) result = result.filter((value) => queryRes.includes(value));
@@ -604,7 +618,7 @@ const toggleActive = function () {
   this.classList.add("active");
 };
 
-const revokeHandler = async function (id) {
+const revokeHandler = async function (id, order) {
   info.classList.add("z-n");
   showConfirmation(
     "confirm revoke",
@@ -615,7 +629,7 @@ const revokeHandler = async function (id) {
   let res = await confirm.then((ev) => true).catch((e) => false);
 
   if (res) {
-    res = await model.adminRevokeCar(id);
+    res = await model.adminRevokeCar(id, order);
 
     $("#car-info").modal("hide");
     if (res) {
@@ -626,7 +640,7 @@ const revokeHandler = async function (id) {
   info.classList.remove("z-n");
 };
 
-const returnHandler = async function (id) {
+const returnHandler = async function (id, order, cust) {
   info.classList.add("z-n");
   showConfirmation(
     "confirm return",
@@ -637,7 +651,7 @@ const returnHandler = async function (id) {
   let res = await confirm.then((ev) => true).catch((e) => false);
 
   if (res) {
-    res = await model.adminReturnCar(id);
+    res = await model.adminReturnCar(id, order, cust);
 
     $("#car-info").modal("hide");
     if (res) {

@@ -55,11 +55,7 @@ CREATE TABLE
         pick_place varchar(64),
         pick_date date,
         res_status varchar(16),
-        PRIMARY KEY(
-            res_id,
-            customer_id,
-            car_id
-        )
+        PRIMARY KEY(res_id, customer_id, car_id)
     );
 
 CREATE TABLE
@@ -73,26 +69,19 @@ CREATE TABLE
         total int,
         pay_date date,
         period int,
-        PRIMARY KEY(
-            res_id,
-            customer_id,
-            car_id
-        )
+        PRIMARY KEY(res_id, customer_id, car_id)
     );
 
-CREATE TABLE 
+CREATE TABLE
     history(
         date date,
         car_id char(10),
         status varchar(16),
-        PRIMARY KEY(
-            date,
-            car_id
-        )
-    );    
+        PRIMARY KEY(date, car_id)
+    );
 
-
-ALTER TABLE reservations
+ALTER TABLE
+    reservations
 ADD
     FOREIGN KEY (car_id) REFERENCES car (car_id);
 
@@ -119,6 +108,7 @@ ADD
 ALTER TABLE favourites
 ADD
     FOREIGN KEY (car_id) REFERENCES car (car_id);
+
 ALTER TABLE history
 ADD
     FOREIGN KEY (car_id) REFERENCES car (car_id);
