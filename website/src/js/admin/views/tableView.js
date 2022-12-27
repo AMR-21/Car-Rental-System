@@ -667,6 +667,13 @@ class TableView {
 
             <button type="submit" class="btn btn-primary mt-5">submit</button>
           </form>
+          <div class="add-footer mt-3">
+          Refer to this 
+          <a target="_blank" href ="https://suite.imagin.studio/?&customer=egalexandria-university-faculty-of-engineering">link</a> for cars information
+          </div>
+          <div class="add-footer">
+          Note: Some cars may not have the chosen color in its image after adding due to lack of models
+          </div>
     `;
   }
 

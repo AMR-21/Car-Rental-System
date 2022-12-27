@@ -387,3 +387,7 @@ table thead {
 .plateNo {
   border-radius: 9px;
 }
+
+.add-footer {
+  font-size: 1.4rem;
+}
