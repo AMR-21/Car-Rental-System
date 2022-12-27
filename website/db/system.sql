@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 27, 2022 at 01:22 PM
+-- Generation Time: Dec 27, 2022 at 01:30 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -101,7 +101,7 @@ INSERT INTO `car` (`car_id`, `brand`, `model`, `type`, `color`, `year`, `seating
 ('c8d090aa98', 'bugatti', 'chiron', 'sport', 'black', 2022, 2, 'fuel', 'automatic', 3000, 'active', '84f5a', 'France'),
 ('c93968892d', 'bugatti', 'chiron', 'sport', 'silver', 2022, 2, 'fuel', 'automatic', 3000, 'active', '846df', 'Argentina'),
 ('ca84c6f91a', 'audi', 'a7', 'sedan', 'black', 2022, 4, 'fuel', 'automatic', 750, 'active', '1429a', 'Japan'),
-('cbce4a4a4e', 'bmw', 'i8', 'sport', 'white', 2020, 4, 'gasoline', 'automatic', 1900, 'active', '14546', 'Brazil'),
+('cbce4a4a4e', 'bmw', 'i8', 'sport', 'white', 2020, 2, 'gasoline', 'automatic', 1900, 'active', '14546', 'Brazil'),
 ('cfd7afd5b9', 'bugatti', 'chiron', 'sport', 'white', 2022, 2, 'fuel', 'automatic', 3000, 'active', 'a46fa', 'Spain'),
 ('d3fe9e9f34', 'cadillac', 'ct5', 'sedan', 'silver', 2022, 4, 'fuel', 'manual', 2400, 'active', '943d7', 'USA'),
 ('da7b7705cb', 'jeep', 'wrangler', 'suv', 'silver', 2022, 4, 'fuel', 'automatic', 680, 'active', 'd4b3b', 'Spain'),
