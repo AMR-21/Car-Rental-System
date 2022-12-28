@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 27, 2022 at 01:30 PM
+-- Generation Time: Dec 28, 2022 at 04:53 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -66,6 +66,7 @@ INSERT INTO `car` (`car_id`, `brand`, `model`, `type`, `color`, `year`, `seating
 ('3cfbef3b0a', 'bmw', 'x3', 'suv', 'white', 2022, 4, 'fuel', 'automatic', 465, 'active', 'b451c', 'China'),
 ('42cca3697d', 'jeep', 'wrangler', 'suv', 'black', 2022, 4, 'fuel', 'automatic', 680, 'active', 'e4eb3', 'Germany'),
 ('43831f79ac', 'bmw', 'i3', 'hatchback', 'black', 2021, 4, 'electric', 'automatic', 1400, 'active', '64cb6', 'Algeria'),
+('43fa707650', 'volkswagen', 'amarok', 'off-road', 'silver', 2022, 4, 'gas', 'manual', 2300, 'active', '56789e', 'Libya'),
 ('44742a51db', 'bentley', 'bentayga', 'suv', 'black', 2022, 4, 'fuel', 'automatic', 2000, 'reserved', '34895', 'Italy'),
 ('4822587542', 'hyundai', 'accent', 'sedan', 'silver', 2022, 4, 'fuel', 'automatic', 350, 'active', 'a4e01', 'Japan'),
 ('49717b02be', 'chevrolet', 'cruze', 'sedan', 'silver', 2022, 4, 'fuel', 'automatic', 400, 'active', 'c426f', 'France'),
@@ -86,6 +87,7 @@ INSERT INTO `car` (`car_id`, `brand`, `model`, `type`, `color`, `year`, `seating
 ('8194aa15ee', 'aston martin', 'dbx', 'suv', 'silver', 2021, 4, 'fuel', 'automatic', 850, 'active', '940ee', 'USA'),
 ('852ee45b7b', 'aston martin', 'db11', 'coupe', 'white', 2022, 2, 'fuel', 'automatic', 1500, 'reserved', 'f4276', 'USA'),
 ('86dce8aee5', 'hyundai', 'bayon', 'suv', 'silver', 2022, 4, 'fuel', 'manual', 350, 'active', 'c4e4d', 'Argentina'),
+('92a8b2b13d', 'volkswagen', 'golf', 'sport', 'silver', 2020, 4, 'electric', 'automatic', 1350, 'active', '5er332', 'Saudi arabia'),
 ('98cd9ca200', 'toyota', 'corolla', 'sedan', 'white', 2016, 4, 'fuel', 'automatic', 350, 'active', 'f4df3', 'France'),
 ('9a5ac71a20', 'audi', 'q3', 'suv', 'black', 2022, 4, 'fuel', 'automatic', 1000, 'active', 'b422a', 'Argentina'),
 ('9b4641fb82', 'aston martin', 'dbx', 'suv', 'silver', 2021, 4, 'fuel', 'automatic', 850, 'active', '64dd5', 'Germany'),
@@ -106,8 +108,10 @@ INSERT INTO `car` (`car_id`, `brand`, `model`, `type`, `color`, `year`, `seating
 ('d3fe9e9f34', 'cadillac', 'ct5', 'sedan', 'silver', 2022, 4, 'fuel', 'manual', 2400, 'active', '943d7', 'USA'),
 ('da7b7705cb', 'jeep', 'wrangler', 'suv', 'silver', 2022, 4, 'fuel', 'automatic', 680, 'active', 'd4b3b', 'Spain'),
 ('e1bae8e606', 'bentley', 'bentayga', 'suv', 'silver', 2022, 4, 'fuel', 'automatic', 2000, 'active', 'f4f82', 'Japan'),
+('e27c5d1740', 'seat', 'ibiza', 'coupe', 'black', 2020, 4, 'electric', 'automatic', 700, 'active', '53229', 'Egypt'),
 ('e5670cf2af', 'bugatti', 'chiron', 'sport', 'black', 2022, 2, 'fuel', 'automatic', 3000, 'active', '240de', 'France'),
 ('eee032719c', 'bugatti', 'chiron', 'sport', 'silver', 2022, 2, 'fuel', 'automatic', 3000, 'active', 'f4985', 'Algeria'),
+('f522990665', 'volkswagen', 'golf', 'sport', 'blue', 2022, 4, 'fuel', 'automatic', 1430, 'active', '5e1235', 'Egypt'),
 ('f628ae014c', 'bmw', 'x2', 'suv', 'silver', 2022, 4, 'fuel', 'automatic', 310, 'active', 'e4ddc', 'Egypt');
 
 -- --------------------------------------------------------
@@ -190,7 +194,10 @@ CREATE TABLE `favourites` (
 --
 
 INSERT INTO `favourites` (`customer_id`, `car_id`) VALUES
-('00b94dd08b', '1dd55b7ee3');
+('00b94dd08b', '1dd55b7ee3'),
+('8af64f3037', '8194aa15ee'),
+('8af64f3037', 'ca84c6f91a'),
+('8af64f3037', 'f628ae014c');
 
 -- --------------------------------------------------------
 
@@ -214,7 +221,9 @@ INSERT INTO `history` (`date`, `car_id`, `status`) VALUES
 ('2022-12-27', '0824f973fe', 'active'),
 ('2022-12-27', '0fb99eb830', 'active'),
 ('2022-12-27', '43831f79ac', 'active'),
-('2022-12-27', '8194aa15ee', 'active');
+('2022-12-27', '8194aa15ee', 'active'),
+('2022-12-27', 'f628ae014c', 'active'),
+('2022-12-28', 'ca84c6f91a', 'active');
 
 -- --------------------------------------------------------
 
@@ -264,6 +273,8 @@ CREATE TABLE `reservations` (
 --
 
 INSERT INTO `reservations` (`res_id`, `car_id`, `customer_id`, `date`, `drop_place`, `drop_date`, `pick_place`, `pick_date`, `res_status`) VALUES
+('52eb19ae57', 'ca84c6f91a', '8af64f3037', '2022-12-28', 'montaza', '2023-01-07', 'sidigaber', '2022-12-29', 'revoked'),
+('78348466e0', 'f628ae014c', '8af64f3037', '2022-12-27', 'smouha', '2022-12-31', 'sidi gaber', '2022-12-28', 'revoked'),
 ('8b909a5f03', '43831f79ac', '00b94dd08b', '2022-12-27', 'sad', '2022-12-31', 'asda', '2022-12-22', 'returned');
 
 --
