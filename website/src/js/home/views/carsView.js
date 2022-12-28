@@ -270,7 +270,7 @@ class CarsView {
                 <div class="info-icon">
                   <ion-icon name="car-sport"></ion-icon>
                 </div>
-                <div class="info-text">${car.plateNo}</div>
+                <div class="info-text">${car.plate_no}</div>
               </div>
 
               <div class="field 
