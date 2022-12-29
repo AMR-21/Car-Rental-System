@@ -83,32 +83,32 @@ CREATE TABLE
 ALTER TABLE
     reservations
 ADD
-    FOREIGN KEY (car_id) REFERENCES car (car_id);
+    FOREIGN KEY (car_id) REFERENCES car (car_id) ON DELETE CASCADE;
 
 ALTER TABLE reservations
 ADD
-    FOREIGN KEY (customer_id) REFERENCES customer (customer_id);
+    FOREIGN KEY (customer_id) REFERENCES customer (customer_id) ON DELETE CASCADE;
 
 ALTER TABLE payments
 ADD
-    FOREIGN KEY (customer_id) REFERENCES reservations (customer_id);
+    FOREIGN KEY (customer_id) REFERENCES reservations (customer_id) ON DELETE CASCADE;
 
 ALTER TABLE payments
 ADD
-    FOREIGN KEY (car_id) REFERENCES reservations (car_id);
+    FOREIGN KEY (car_id) REFERENCES reservations (car_id) ON DELETE CASCADE;
 
 ALTER TABLE payments
 ADD
-    FOREIGN KEY (res_id) REFERENCES reservations (res_id);
+    FOREIGN KEY (res_id) REFERENCES reservations (res_id) ON DELETE CASCADE;
 
 ALTER TABLE favourites
 ADD
-    FOREIGN KEY (customer_id) REFERENCES customer (customer_id);
+    FOREIGN KEY (customer_id) REFERENCES customer (customer_id) ON DELETE CASCADE;
 
 ALTER TABLE favourites
 ADD
-    FOREIGN KEY (car_id) REFERENCES car (car_id);
+    FOREIGN KEY (car_id) REFERENCES car (car_id) ON DELETE CASCADE;
 
 ALTER TABLE history
 ADD
-    FOREIGN KEY (car_id) REFERENCES car (car_id);
+    FOREIGN KEY (car_id) REFERENCES car (car_id) ON DELETE CASCADE;
