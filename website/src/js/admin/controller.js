@@ -306,8 +306,6 @@ const search = function (head) {
     if (r1 === r2) query.splice(i, 1);
   }
 
-  console.log(query);
-
   if (!query.length) {
     renderState();
     return;

@@ -40,7 +40,7 @@ class SearchView {
               <input
                 type="text"
                 class="form-control"
-                id="customer_Id"
+                id="customer_id"
                 aria-describedby="cust-id"
                 placeholder="12345"
               />
