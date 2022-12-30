@@ -682,6 +682,11 @@ app.post("/reserveCar", function (request, response) {
   const resId = getId();
   const data = request.body.data;
 
+  const valQuery = `
+  select * 
+  from reservations 
+  where car_id = "${data.car_id}" and res_status = "active";`;
+
   const query = `
   INSERT INTO reservations VALUES 
   ('${resId}','${data.car_id}','${request.session.userId}','${data.date}','${data.drop_place}','${data.drop_date}','${data.pick_place}','${data.pick_date}','active');
@@ -693,27 +698,43 @@ app.post("/reserveCar", function (request, response) {
   select *
   from history
   where date="${data.date}" and car_id = "${data.car_id}";
+
   `;
 
   try {
-    connection.query(query, (err, rows) => {
+    connection.query(valQuery, (err, rows) => {
       try {
         if (err) throw err;
 
-        if (rows[2].length === 0) {
-          connection.query(
-            `insert into history values("${data.date}","${data.car_id}","reserved")`
-          );
-        } else {
-          connection.query(
-            `update history 
-             set status= "reserved" 
-             where date = "${data.date}" and car_id ="${data.car_id}";`
-          );
+        if (rows.length > 0) {
+          response.status(404);
+          response.send("Car already reserved");
+          return;
         }
 
-        request.session.limit--;
-        response.json(resId);
+        connection.query(query, (e, res) => {
+          try {
+            if (e) throw e;
+
+            if (res[2].length === 0) {
+              connection.query(
+                `insert into history values("${data.date}","${data.car_id}","reserved")`
+              );
+            } else {
+              connection.query(
+                `update history 
+             set status= "reserved" 
+             where date = "${data.date}" and car_id ="${data.car_id}";`
+              );
+            }
+
+            request.session.limit--;
+            response.json(resId);
+          } catch (e) {
+            response.status(500);
+            response.send("Error in database");
+          }
+        });
       } catch (error) {
         response.status(500);
         response.send("Error in database");
