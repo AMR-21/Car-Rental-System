@@ -196,7 +196,6 @@ const filter = function () {
       return;
     }
 
-    console.log(filter[1]);
     if (filter[0] === "region" && filter[1] && filter[1] != "-") {
       queryRes.push(
         ...data.filter((car) => car.cca2 === filter[1].toUpperCase())
@@ -307,6 +306,8 @@ const search = function (head) {
     if (r1 === r2) query.splice(i, 1);
   }
 
+  console.log(query);
+
   if (!query.length) {
     renderState();
     return;
@@ -316,6 +317,11 @@ const search = function (head) {
 
   getActiveData()?.forEach((u) => {
     let flag = true;
+    if (u.pick_date) {
+      u.pick_date = u.pick_date.split("T")[0];
+      u.drop_date = u.drop_date.split("T")[0];
+      u.date = u.date.split("T")[0];
+    }
 
     query.forEach((q) => {
       if (q.name === "range") {

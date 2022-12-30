@@ -56,8 +56,8 @@ const init = async () => {
     .addEventListener("click", model.signOut.bind(null));
 
   pick.min = today;
-  drop.min = tommorow;
-  drop.max = tommorow;
+  drop.min = today;
+  drop.max = today;
   pick.max = max;
 
   pick.addEventListener("input", () => {
@@ -120,8 +120,8 @@ const handleForm = function () {
       $("#car-info").modal("hide");
 
       pick.min = today;
-      drop.min = tommorow;
-      drop.max = tommorow;
+      drop.min = today;
+      drop.max = today;
       pick.max = max;
     }
     info.classList.remove("z-n");
@@ -206,8 +206,8 @@ const handleView = function () {
             form.querySelector("#drop-off-location").value =
               "";
           pick.min = today;
-          drop.min = tommorow;
-          drop.max = tommorow;
+          drop.min = today;
+          drop.max = today;
           pick.max = max;
 
           form.classList.remove("was-validated");

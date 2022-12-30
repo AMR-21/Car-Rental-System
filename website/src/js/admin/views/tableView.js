@@ -150,10 +150,10 @@ class TableView {
             <td class="table-field">${car.car_id}</td>
             <td class="table-field">${brand}</td>
             <td class="table-field">${car.model.toUpperCase()}</td>
-            <td class="table-field">${car.plate_no}</td>
-            <td class="table-field">${car.region}</td>
+            <td class="table-field">${car.plate_no.toUpperCase()}</td>
+            <td class="table-field">${car.region.length<4? car.region.toUpperCase():car.region[0].toUpperCase() + car.region.slice(1).toLowerCase()}</td>
             <td class="table-field">${car.rate}</td>
-            <td class="table-field">${car.status}</td>
+            <td class="table-field">${car.status.length<4?car.status.toUpperCase():car.status[0].toUpperCase() + car.status.slice(1).toLowerCase()}</td>
                <td class="table-field">
               <button
                 class="btn btn-primary btn-view mx-auto"
@@ -210,14 +210,14 @@ class TableView {
             <td class="table-field">${car.customer_id}</td>
             <td class="table-field">${brand}</td>
             <td class="table-field">${car.model.toUpperCase()}</td>
-            <td class="table-field">${car.plate_no}</td>
+            <td class="table-field">${car.plate_no.toUpperCase()}</td>
             <td class="table-field">${car.region}</td>
             <td class="table-field">${car.rate}</td>
             <td class="table-field">${car.pick_date.split("T")[0]}</td>
             <td class="table-field">${car.drop_date.split("T")[0]}</td>
             <td class="table-field">${car.date.split("T")[0]}</td>
-            <td class="table-field">${car.status}</td>
-            <td class="table-field">${car.res_status}</td>
+            <td class="table-field">${car.status[0].toUpperCase() + car.status.slice(1).toLowerCase()}</td>
+            <td class="table-field">${car.res_status[0].toUpperCase() + car.res_status.slice(1).toLowerCase()}</td>
             <td class="table-field">
               <button
                 class="btn btn-primary btn-view mx-auto"
@@ -250,18 +250,18 @@ class TableView {
             <td class="table-field">${car.car_id}</td>
             <td class="table-field">${brand}</td>
             <td class="table-field">${car.model.toUpperCase()}</td>
-            <td class="table-field">${car.plate_no}</td>
+            <td class="table-field">${car.plate_no.toUpperCase()}</td>
             <td class="table-field">${
               car.type[0].toUpperCase() + car.type.slice(1).toLowerCase()
             }</td>
             <td class="table-field">${car.year}</td>
             <td class="table-field">${car.seating}</td>
-            <td class="table-field">${car.transmission}</td>
+            <td class="table-field">${car.transmission[0].toUpperCase() + car.transmission.slice(1).toLowerCase()}</td>
             <td class="table-field">${car.rate}</td>
             <td class="table-field">${car.region}</td>
-            <td class="table-field">${car.powertrain}</td>
-            <td class="table-field">${car.color}</td>
-            <td class="table-field">${car.status}</td>
+            <td class="table-field">${car.powertrain[0].toUpperCase() + car.powertrain.slice(1).toLowerCase()}</td>
+            <td class="table-field">${car.color[0].toUpperCase() + car.color.slice(1).toLowerCase()}</td>
+            <td class="table-field">${car.status.length<4?car.status.toUpperCase():car.status[0].toUpperCase() + car.status.slice(1).toLowerCase()}</td>
             <td class="table-field">
               <button
                 class="btn btn-primary btn-view mx-auto"

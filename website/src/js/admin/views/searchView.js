@@ -18,7 +18,7 @@ class SearchView {
               <input
                 type="text"
                 class="form-control"
-                id="resId"
+                id="res_id"
                 aria-describedby="res-id"
                 placeholder="12345"
               />
@@ -29,7 +29,7 @@ class SearchView {
               <input
                 type="text"
                 class="form-control"
-                id="carId"
+                id="car_id"
                 aria-describedby="car-id"
                 placeholder="12345"
               />
@@ -40,20 +40,20 @@ class SearchView {
               <input
                 type="text"
                 class="form-control"
-                id="custId"
+                id="customer_Id"
                 aria-describedby="cust-id"
                 placeholder="12345"
               />
             </div>
 
             <div class="input-group">
-              <span class="input-group-text" id="cust-name">Customer Name</span>
+              <span class="input-group-text" id="cust-name">Reservation status</span>
               <input
                 type="text"
                 class="form-control"
-                id="custName"
+                id="res_status"
                 aria-describedby="cust-name"
-                placeholder="12345"
+                placeholder="active"
               />
             </div>
 
@@ -62,7 +62,7 @@ class SearchView {
               <input
                 type="text"
                 class="form-control"
-                id="plateNo"
+                id="plate_no"
                 aria-describedby="plate-id"
                 placeholder="5E4333"
               />
@@ -75,7 +75,7 @@ class SearchView {
               <input
                 type="date"
                 class="form-control"
-                id="pickup"
+                id="pick_date"
                 aria-describedby="pick-date"
               />
             </div>
@@ -85,7 +85,7 @@ class SearchView {
               <input
                 type="date"
                 class="form-control"
-                id="drop"
+                id="drop_date"
                 aria-describedby="drop-date"
               />
             </div>

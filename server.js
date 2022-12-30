@@ -38,6 +38,7 @@ const connection = mysql.createConnection({
   database: process.env.database,
   password: process.env.password,
   multipleStatements: true,
+  dateStrings: true,
 });
 
 connection.connect((err) => {
@@ -400,7 +401,8 @@ app.post("/dailyPayments", (request, response) => {
   const query = `
    select pay_date as date,sum(total) as total,count(pay_date) as number
   from payments
-  WHERE pay_date between "${d1}" and "${d2}" and pay_status="paid";
+  WHERE pay_date between "${d1}" and "${d2}" and pay_status="paid"
+  group by pay_date;
   `;
 
   try {
@@ -620,18 +622,24 @@ app.post("/returnCar", function (request, response) {
         if (err) throw err;
         const pick = new Date(rows[0][0].pick_date);
         const drop = new Date(rows[0][0].drop_date);
-        const period = Math.ceil(Math.abs(drop - pick) / (1000 * 60 * 60 * 24));
-        const actualPeriod = Math.ceil(
+        let period = Math.ceil(Math.abs(drop - pick) / (1000 * 60 * 60 * 24));
+        let actualPeriod = Math.ceil(
           Math.abs(new Date(returnDate) - pick) / (1000 * 60 * 60 * 24)
         );
 
-        const rate = rows[3][0].rate;
+        if (period === 0) period = 1;
+        if (actualPeriod === 0) actualPeriod = 1;
 
-        const total = period * rate + (actualPeriod - period) * (rate + 150);
+        const rate = rows[3][0].rate;
+        let total;
+        if (actualPeriod <= period) total = actualPeriod * rate;
+        else
+          total =
+            period * rate + Math.abs(actualPeriod - period) * (rate + 100);
 
         connection.query(
           `INSERT INTO payments
-          VALUES ('${order}','${id}','${cust}','${returnDate}',null,'unpaid',${total},null,${period})`
+          VALUES ('${order}','${id}','${cust}','${returnDate}',null,'unpaid',${total},null,${actualPeriod})`
         );
 
         if (rows[4].length === 0) {

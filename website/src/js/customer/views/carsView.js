@@ -496,7 +496,7 @@ class CarsView {
           </div>
           <div class="pay-date">
             <span class="pay-sub">Duration</span>${payment.period}
-            <span class="pay-sub">days</span>
+            <span class="pay-sub">day${payment.period>1?'s':""}</span>
           </div>
         </div>
         <button type="button" data-bs-toggle="modal" data-bs-target="#pay" class="btn btn-primary btn-pay ${

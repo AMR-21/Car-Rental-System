@@ -58,10 +58,14 @@ export const adminGetData = async () => {
     const reservations = data.reservations;
     state.cars = [
       ...data.cars.filter(
-        (c) => !data.reservations.some((car) => car.car_id === c.car_id)
+        (c) =>
+          !data.reservations.some(
+            (car) => car.car_id === c.car_id && car.res_status === "active"
+          )
       ),
-      ...data.reservations,
+      ...data.reservations.filter((c) => c.res_status === "active"),
     ];
+
     state.users = data.users;
 
     state.reservations = data.reservations;
@@ -331,7 +335,7 @@ export const addFavorite = async (id) => {
     state.favourites.push(car);
     sortCars();
 
-    return [true, "Car added to favourites successfully"];
+    return [true, "Car added to favorites successfully"];
   } catch (e) {
     return [false, e.message];
   }
@@ -353,11 +357,11 @@ export const removeFavorite = async (id) => {
     }
 
     const car = state.favourites.findIndex((c) => c.car_id === id);
-    if (!car) throw new Error("Cannot find car");
+    if (car === -1) throw new Error("Cannot find car");
     state.favourites.splice(car, 1);
     sortCars();
 
-    return [true, "Car removed from favourites successfully"];
+    return [true, "Car removed from favorites successfully"];
   } catch (e) {
     return [false, e.message];
   }
@@ -517,7 +521,7 @@ export const reserveCar = async function (data, flag) {
       (1000 * 60 * 60 * 24)
   );
 
-  if (period < 1 || period > 30)
+  if (period < 0 || period > 30)
     return [false, "Period must be between 1 and 30 days"];
 
   const date = new Date();
