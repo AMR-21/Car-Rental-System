@@ -171,6 +171,9 @@ table thead {
   padding: 1.4 0.8rem;
   width: 90%;
   font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-delete {
@@ -390,4 +393,9 @@ table thead {
 
 .add-footer {
   font-size: 1.4rem;
+}
+
+.form-control:focus {
+  border-color: var(--tint-primary);
+  box-shadow: var(--tint-primary);
 }

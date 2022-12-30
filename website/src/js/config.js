@@ -32,9 +32,9 @@ export const CUSTOMER_HEAD = `
 
 export const RESERVATIONS_HEAD = `
             <th class="table-field">#</th>
-            <th class="table-field">order number</th>
+            <th class="table-field">res. number</th>
             <th class="table-field">car id</th>
-            <th class="table-field">customer id</th>
+            <th class="table-field">cust. id</th>
             <th class="table-field">brand</th>
             <th class="table-field">model</th>
             <th class="table-field">plate Number</th>

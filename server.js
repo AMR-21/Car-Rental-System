@@ -173,7 +173,8 @@ app.post("/signIn", function (request, response) {
         }
       );
     } catch (error) {
-      response.sendStatus(404);
+      response.status(500);
+      response.send("Error in database");
       response.end();
     }
   });
@@ -197,13 +198,14 @@ app.post("/register", function (request, response) {
         if (err) throw err;
         response.sendStatus(200);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
         return;
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -269,12 +271,13 @@ app.get("/adminData", async (request, response) => {
         };
         response.json(data);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -310,12 +313,13 @@ app.get("/data", (request, response) => {
         };
         response.json(data);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -337,12 +341,13 @@ app.get("/payments", (request, response) => {
 
         response.json(rows);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -367,12 +372,13 @@ app.post("/addCar", (request, response) => {
         if (err) throw err;
         response.sendStatus(200);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -403,12 +409,13 @@ app.post("/dailyPayments", (request, response) => {
         if (err) throw err;
         response.json(rows);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -430,12 +437,13 @@ app.post("/addFavourite", function (request, response) {
 
         response.sendStatus(200);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -459,12 +467,13 @@ app.post("/removeFavourite", function (request, response) {
 
         response.sendStatus(200);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -505,12 +514,13 @@ app.post("/pickCar", function (request, response) {
         }
         response.sendStatus(200);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -558,12 +568,13 @@ app.post("/revokeCar", function (request, response) {
 
         response.sendStatus(200);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -638,12 +649,13 @@ app.post("/returnCar", function (request, response) {
 
         response.sendStatus(200);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -654,7 +666,8 @@ app.post("/reserveCar", function (request, response) {
   }
 
   if (request.session.limit === 0) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Reserved car limit exceeded");
     return;
   }
 
@@ -694,12 +707,13 @@ app.post("/reserveCar", function (request, response) {
         request.session.limit--;
         response.json(resId);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -714,7 +728,6 @@ app.post("/pay", function (request, response) {
   const d = new Date();
   const date = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 
-  request.session.userId = "00b94dd08b";
   const query = `
     update payments
     set method = "${method}" , pay_date="${date}", pay_status="paid" 
@@ -727,12 +740,13 @@ app.post("/pay", function (request, response) {
 
         response.sendStatus(200);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -776,12 +790,13 @@ app.post("/suspendCar", function (request, response) {
         }
         response.sendStatus(200);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -825,12 +840,13 @@ app.post("/activateCar", function (request, response) {
         }
         response.sendStatus(200);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -854,12 +870,13 @@ app.post("/deleteCustomer", function (request, response) {
         if (err) throw err;
         response.sendStatus(200);
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
@@ -942,18 +959,18 @@ app.post("/daily", (request, response) => {
         if (err) throw err;
         response.json({ date, data: rows });
       } catch (error) {
-        console.log(error);
-        response.sendStatus(404);
+        response.status(500);
+        response.send("Error in database");
       }
     });
   } catch (e) {
-    response.sendStatus(404);
+    response.status(500);
+    response.send("Error in database");
   }
 });
 
 // Setup Server
-const port = 8000;
 
-const server = app.listen(port, () =>
-  console.log(`Server is running on localhost: ${port}`)
+const server = app.listen(process.env.port, () =>
+  console.log(`Server is running on localhost: ${process.env.port}`)
 );

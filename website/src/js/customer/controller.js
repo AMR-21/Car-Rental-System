@@ -10,12 +10,26 @@ const container = document.querySelector(".app-container");
 const payContainer = document.querySelector(".payment-container");
 const info = document.querySelector("#car-info");
 const alert = document.querySelector(".alert");
+const pick = document.querySelector("#pickup-date");
+const drop = document.querySelector("#drop-off-date");
+const d = new Date();
+const t = new Date();
+t.setDate(d.getDate() + 1);
+// prettier-ignore
+const today = `${d.getFullYear()}-${`${d.getMonth() + 1}`.padStart(2,"0")}-${`${d.getDate()}`.padStart(2, "0")}`;
+// prettier-ignore
+const tommorow = `${t.getFullYear()}-${`${t.getMonth() + 1}`.padStart(2,"0")}-${`${t.getDate()}`.padStart(2, "0")}`;
+const maxDuration = new Date();
+maxDuration.setDate(d.getDate() + 30);
+
+//prettier-ignore
+const max = `${maxDuration.getFullYear()}-${`${maxDuration.getMonth() + 1}`.padStart(2,"0")}-${`${maxDuration.getDate()}`.padStart(2,"0")}`;
+
 let confirm;
 
 let active = "home",
   filtered,
-  activeCar,
-  activePayment;
+  activeCar;
 
 const init = async () => {
   const countries = await model.getCountries();
@@ -41,19 +55,20 @@ const init = async () => {
     .querySelector(".btn-signout")
     .addEventListener("click", model.signOut.bind(null));
 
-  const d = new Date();
-  const date = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
-
-  const pick = document.querySelector("#pickup-date");
-  const drop = document.querySelector("#drop-off-date");
-  pick.min = drop.min = date;
+  pick.min = today;
+  drop.min = tommorow;
+  drop.max = tommorow;
+  pick.max = max;
 
   pick.addEventListener("input", () => {
     drop.min = pick.value;
-  });
+    const date = new Date(pick.value);
+    date.setDate(date.getDate() + 30);
 
-  drop.addEventListener("input", () => {
-    pick.max = drop.value;
+    //prettier-ignore
+    const max = `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2,"0")}-${`${date.getDate()}`.padStart(2,"0")}`;
+
+    drop.max = max;
   });
 
   handleView();
@@ -103,6 +118,11 @@ const handleForm = function () {
 
       form.classList.remove("was-validated");
       $("#car-info").modal("hide");
+
+      pick.min = today;
+      drop.min = tommorow;
+      drop.max = tommorow;
+      pick.max = max;
     }
     info.classList.remove("z-n");
   });
@@ -185,6 +205,10 @@ const handleView = function () {
             form.querySelector("#drop-off-date").value =
             form.querySelector("#drop-off-location").value =
               "";
+          pick.min = today;
+          drop.min = tommorow;
+          drop.max = tommorow;
+          pick.max = max;
 
           form.classList.remove("was-validated");
         }
@@ -236,12 +260,12 @@ export const favouriteHandler = async function () {
 
   if (btn.classList.contains("fav-active")) {
     const res = await model.addFavorite(id);
-    if (res) showAlert("Car added to favourites successfully");
-    else showAlert("Car addition to favourites failed", false);
+    if (res[0]) showAlert(res[1]);
+    else showAlert(res[1], false);
   } else {
     const res = await model.removeFavorite(id);
-    if (res) showAlert("Car removed from favourites successfully");
-    else showAlert("Car removal from favourites failed", false);
+    if (res[0]) showAlert(res[1]);
+    else showAlert(res[1], false);
   }
 
   if (active === "favourites") {
@@ -439,11 +463,11 @@ const paymentHandler = async function (order, car) {
   let res = await confirm.then((ev) => true).catch((e) => false);
   if (res) {
     res = await model.makePayment(order, car, method);
-    if (res) {
-      showAlert("Payment was completed successfully");
+    if (res[0]) {
+      showAlert(res[1]);
       $("#pay").modal("hide");
       renderPayments();
-    } else showAlert("Payment failed", false);
+    } else showAlert(res[1], false);
   }
   document.querySelector("#pay").classList.remove("z-n");
 };
@@ -455,14 +479,15 @@ const pickHandler = async function (id) {
     "Do you want to confirm picking this car?",
     "confirm"
   );
+
   let res = await confirm.then((ev) => true).catch((e) => false);
   if (res) {
     res = await model.pickCar(id);
     $("#car-info").modal("hide");
-    if (res) {
-      showAlert("Car pick was completed successfully");
-      renderState();
-    } else showAlert("Car pick failed", false);
+    if (res[0]) showAlert(res[1]);
+    else showAlert(res[1], false);
+
+    renderState();
   }
   info.classList.remove("z-n");
 };
@@ -478,10 +503,9 @@ const revokeHandler = async function (id, order) {
   if (res) {
     res = await model.revokeCar(id, order);
     $("#car-info").modal("hide");
-    if (res) {
-      showAlert("Car revoke was completed successfully");
-      renderState();
-    } else showAlert("Car revoke failed", false);
+    if (res[0]) showAlert(res[1]);
+    else showAlert(res[1], false);
+    renderState();
   }
   info.classList.remove("z-n");
 };
@@ -489,11 +513,9 @@ const revokeHandler = async function (id, order) {
 const reserveHandler = async function (info) {
   let res = await model.reserveCar(info, active === "favourites");
   $("#car-info").modal("hide");
-  if (res) {
-    showAlert("Car reservation was completed successfully");
-  } else {
-    showAlert("Car reservation failed", false);
-  }
+  if (res[0]) showAlert(res[1]);
+  else showAlert(res[1], false);
+
   renderState();
 };
 
@@ -510,10 +532,9 @@ const returnHandler = async function (id, order) {
   if (res) {
     res = await model.returnCar(id, order);
     $("#car-info").modal("hide");
-    if (res) {
-      showAlert("Car return was completed successfully");
-      renderState();
-    } else showAlert("Car return failed", false);
+    if (res[0]) showAlert(res[1]);
+    else showAlert(res[1], false);
+    renderState();
   }
   info.classList.remove("z-n");
 };

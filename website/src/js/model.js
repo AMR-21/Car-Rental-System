@@ -90,11 +90,11 @@ export const adminRevokeCar = async function (id, order) {
 
     let index = state.cars.findIndex((c) => c.car_id === id);
 
-    if (index == -1) return;
+    if (index == -1) return false;
     state.cars.splice(index, 1);
 
     index = state.reservations.findIndex((c) => c.res_id === order);
-    if (index == -1) return;
+    if (index == -1) return false;
 
     state.reservations[index].status = "active";
     state.reservations[index].res_status = "revoked";
@@ -102,7 +102,7 @@ export const adminRevokeCar = async function (id, order) {
     state.cars.push(state.reservations[index]);
 
     index = state.reserved.findIndex((c) => c.car_id === id);
-    if (index == -1) return;
+    if (index == -1) return false;
 
     state.reserved[index].status = "active";
 
@@ -131,11 +131,11 @@ export const adminReturnCar = async function (id, order, cust) {
 
     let index = state.cars.findIndex((c) => c.car_id === id);
 
-    if (index == -1) return;
+    if (index == -1) return false;
     state.cars.splice(index, 1);
 
     index = state.reservations.findIndex((c) => c.res_id === order);
-    if (index == -1) return;
+    if (index == -1) return false;
 
     state.reservations[index].status = "active";
     state.reservations[index].res_status = "returned";
@@ -143,7 +143,7 @@ export const adminReturnCar = async function (id, order, cust) {
     state.cars.push(state.reservations[index]);
 
     index = state.rented.findIndex((c) => c.car_id === id);
-    if (index == -1) return;
+    if (index == -1) return false;
 
     state.rented[index].status = "active";
 
@@ -200,7 +200,6 @@ export const activateCar = async function (id) {
 };
 
 export const deleteCustomer = async function (id) {
-  console.log(id);
   try {
     const res = await fetch(`${SERVER_URL}/deleteCustomer`, {
       method: "POST",
@@ -209,6 +208,7 @@ export const deleteCustomer = async function (id) {
       },
       body: JSON.stringify({ id }),
     });
+
     if (!res.ok) throw new Error();
 
     const index = state.users.findIndex((u) => u.customer_id === id);
@@ -216,7 +216,6 @@ export const deleteCustomer = async function (id) {
 
     state.users.splice(index, 1);
 
-    console.log(state.users);
     return true;
   } catch (e) {
     return false;
@@ -254,7 +253,7 @@ export const adminGetPayments = async function (period) {
 
     const data = await res.json();
 
-    state.payments = data;
+    if (data[0].date !== null) state.payments = data;
   } catch (e) {
     return false;
   }
@@ -269,7 +268,11 @@ export const addCar = async function (data) {
       },
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error();
+
+    if (!res.ok) {
+      const mes = await res.text();
+      throw new Error(mes);
+    }
 
     await adminGetData();
     return true;
@@ -283,9 +286,11 @@ export const getData = async () => {
     const res = await fetch(`${SERVER_URL}/data`);
     const data = await res.json();
 
-    if (!res.ok) throw new Error();
+    if (!res.ok) {
+      const mes = await res.text();
+      throw new Error(mes);
+    }
 
-    const reservations = data.reservations;
     state.cars = data.cars;
     state.favourites = data.favs;
     state.rented = data.reservations.filter((c) => c.status === "rented");
@@ -313,19 +318,22 @@ export const addFavorite = async (id) => {
       body: JSON.stringify({ id }),
     });
 
-    if (!res.ok) throw new Error();
+    if (!res.ok) {
+      const mes = await res.text();
+      throw new Error(mes);
+    }
 
     let car = state.cars.find((c) => c.car_id === id);
     if (!car) car = state.reserved.find((c) => c.car_id === id);
     if (!car) car = state.rented.find((c) => c.car_id === id);
+    if (!car) throw new Error("Cannot find car");
 
     state.favourites.push(car);
     sortCars();
 
-    return true;
+    return [true, "Car added to favourites successfully"];
   } catch (e) {
-    console.log(e);
-    return false;
+    return [false, e.message];
   }
 };
 
@@ -339,22 +347,31 @@ export const removeFavorite = async (id) => {
       body: JSON.stringify({ id }),
     });
 
-    if (!res.ok) throw new Error();
+    if (!res.ok) {
+      const mes = await res.text();
+      throw new Error(mes);
+    }
 
     const car = state.favourites.findIndex((c) => c.car_id === id);
+    if (!car) throw new Error("Cannot find car");
     state.favourites.splice(car, 1);
     sortCars();
 
-    return true;
+    return [true, "Car removed from favourites successfully"];
   } catch (e) {
-    console.log(e);
-    return false;
+    return [false, e.message];
   }
 };
 
 export const pickCar = async function (id) {
   const index = state.reserved.findIndex((c) => c.car_id === id);
-  if (index == -1) return;
+  if (index == -1) return [false, "Cannot find car"];
+
+  const pickDate = new Date(state.reserved[index].pick_date);
+  const today = new Date();
+
+  if (today.getTime() < pickDate.getTime())
+    return [false, "Cannot pick-up car before pick-up date"];
 
   try {
     const res = await fetch(`${SERVER_URL}/pickCar`, {
@@ -365,23 +382,35 @@ export const pickCar = async function (id) {
       body: JSON.stringify({ id }),
     });
 
-    if (!res.ok) throw new Error();
+    if (!res.ok) {
+      const mes = await res.text();
+      throw new Error(mes);
+    }
 
     state.reserved[index].status = "rented";
     state.rented.push(state.reserved[index]);
+
+    const favIndex = state.favourites.findIndex((c) => c.car_id === id);
+
+    if (favIndex > -1) {
+      state.favourites.splice(favIndex, 1);
+      state.favourites.push(state.reserved[index]);
+      sortCars();
+    }
+
     state.reserved.splice(index, 1);
     sortCars("rented");
     sortCars("reserved");
 
-    return true;
+    return [true, "Car picked successfully"];
   } catch (e) {
-    console.log(e);
+    return [false, e.message];
   }
 };
 
 export const revokeCar = async function (id, order) {
   const index = state.reserved.findIndex((c) => c.car_id === id);
-  if (index == -1) return;
+  if (index == -1) return [false, "Cannot find car"];
 
   try {
     const res = await fetch(`${SERVER_URL}/revokeCar`, {
@@ -392,7 +421,10 @@ export const revokeCar = async function (id, order) {
       body: JSON.stringify({ order, id }),
     });
 
-    if (!res.ok) throw new Error();
+    if (!res.ok) {
+      const mes = await res.text();
+      throw new Error(mes);
+    }
 
     // clear reserve-info
     state.reserved[index].status = "active";
@@ -405,20 +437,28 @@ export const revokeCar = async function (id, order) {
     state.reserved[index].drop_place = "";
 
     state.cars.push(state.reserved[index]);
+
+    const favIndex = state.favourites.findIndex((c) => c.car_id === id);
+
+    if (favIndex > -1) {
+      state.favourites.splice(favIndex, 1);
+      state.favourites.push(state.reserved[index]);
+      sortCars();
+    }
+
     state.reserved.splice(index, 1);
     sortCars("all");
     sortCars("reserved");
 
-    return true;
+    return [true, "Car revoked successfully"];
   } catch (e) {
-    console.log(e);
-    return false;
+    return [false, e.message];
   }
 };
 
 export const returnCar = async function (id, order) {
   const index = state.rented.findIndex((c) => c.car_id === id);
-  if (index == -1) return;
+  if (index == -1) return [false, "Cannot find car"];
   const date = new Date();
 
   try {
@@ -434,7 +474,10 @@ export const returnCar = async function (id, order) {
       }),
     });
 
-    if (!res.ok) throw new Error();
+    if (!res.ok) {
+      const mes = await res.text();
+      throw new Error(mes);
+    }
 
     state.rented[index].status = "active";
     state.rented[index].res_id = "";
@@ -446,23 +489,37 @@ export const returnCar = async function (id, order) {
     state.rented[index].drop_place = "";
 
     state.cars.push(state.rented[index]);
-    console.log(state.cars);
+
+    const favIndex = state.favourites.findIndex((c) => c.car_id === id);
+
+    if (favIndex > -1) {
+      state.favourites.splice(favIndex, 1);
+      state.favourites.push(state.rented[index]);
+      sortCars();
+    }
+
     state.rented.splice(index, 1);
 
     sortCars("all");
     sortCars("rented");
-    return true;
+    return [true, "Car returned successfully"];
   } catch (e) {
-    console.log(e);
-    return false;
+    return [false, e.message];
   }
 };
 
 export const reserveCar = async function (data, flag) {
   const index = state.cars.findIndex((c) => c.car_id === data.car_id);
-  if (index == -1) return;
+  if (index == -1) return [false, "Cannot find car"];
 
-  const favIndex = state.favourites.findIndex((c) => c.car_id === data.car_id);
+  const period = Math.ceil(
+    Math.abs(new Date(data.drop_date) - new Date(data.pick_date)) /
+      (1000 * 60 * 60 * 24)
+  );
+
+  if (period < 1 || period > 30)
+    return [false, "Period must be between 1 and 30 days"];
+
   const date = new Date();
 
   data.date = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
@@ -478,7 +535,10 @@ export const reserveCar = async function (data, flag) {
       }),
     });
 
-    if (!res.ok) throw new Error();
+    if (!res.ok) {
+      const mes = await res.text();
+      throw new Error(mes);
+    }
 
     const resId = await res.json();
 
@@ -495,7 +555,11 @@ export const reserveCar = async function (data, flag) {
     sortCars("all");
     sortCars("reserved");
 
-    if (flag && favIndex > -1) {
+    const favIndex = state.favourites.findIndex(
+      (c) => c.car_id === data.car_id
+    );
+
+    if (favIndex > -1) {
       state.favourites.splice(favIndex, 1);
       state.favourites.push(state.cars[index]);
       sortCars();
@@ -503,23 +567,26 @@ export const reserveCar = async function (data, flag) {
 
     state.cars.splice(index, 1);
 
-    return true;
+    return [true, "Car reserved successfully"];
   } catch (e) {
-    console.log(e);
-    return false;
+    return [false, e.message];
   }
 };
 
 export const getPayments = async function () {
   try {
     const res = await fetch(`${SERVER_URL}/payments`);
-    if (!res.ok) throw new Error();
+
+    if (!res.ok) {
+      const mes = await res.text();
+      throw new Error(mes);
+    }
 
     const data = await res.json();
     state.payments = data;
+
     return true;
   } catch (e) {
-    console.log(e);
     return false;
   }
 };
@@ -533,12 +600,15 @@ export const makePayment = async function (order, id, method) {
       },
       body: JSON.stringify({ order, id, method }),
     });
-    if (!res.ok) throw new Error();
 
-    return true;
+    if (!res.ok) {
+      const mes = await res.text();
+      throw new Error(mes);
+    }
+
+    return [true, "Payment made successfully"];
   } catch (e) {
-    console.log(e);
-    return false;
+    return [false, e.message];
   }
 };
 

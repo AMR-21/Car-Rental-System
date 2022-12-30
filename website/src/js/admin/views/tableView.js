@@ -40,7 +40,7 @@ class TableView {
       thead.appendChild(tr);
 
       if (active === "cars")
-        if (data)
+        if (data.length > 0)
           data.forEach((car, i) => {
             const div = document.createElement("tr");
             div.insertAdjacentHTML(
@@ -51,7 +51,7 @@ class TableView {
           });
 
       if (active === "status")
-        if (data)
+        if (data.length > 0)
           data.forEach((car, i) => {
             const div = document.createElement("tr");
             div.insertAdjacentHTML(
@@ -62,7 +62,7 @@ class TableView {
           });
 
       if (active === "customers")
-        if (data)
+        if (data.length > 0)
           data.forEach((customer, i) => {
             const div = document.createElement("tr");
             div.insertAdjacentHTML(
@@ -73,7 +73,7 @@ class TableView {
           });
 
       if (active === "reservations")
-        if (data)
+        if (data.length > 0)
           data.forEach((car, i) => {
             const div = document.createElement("tr");
             div.insertAdjacentHTML(
@@ -84,7 +84,7 @@ class TableView {
           });
 
       if (active === "payments")
-        if (data)
+        if (data.length > 0)
           data.forEach((pay, i) => {
             const div = document.createElement("tr");
             div.insertAdjacentHTML(
@@ -127,7 +127,7 @@ class TableView {
     return `
         <tr class="table-row"">
             <td class="table-field">${i}</td>
-            <td class="table-field">${pay?.date.split('T')[0]}</td>
+            <td class="table-field">${pay?.date?.split('T')[0]}</td>
             <td class="table-field">${pay.number}</td>
             <td class="table-field">${pay.total}</td>
           </tr>

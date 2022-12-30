@@ -316,15 +316,22 @@ const search = function (head) {
 
   getActiveData()?.forEach((u) => {
     let flag = true;
+
     query.forEach((q) => {
       if (q.name === "range") {
-        const r1 = new Date(q.value.split("-")[0].trim()).getTime();
-        const r2 = new Date(q.value.split("-")[1].trim()).getTime();
-        const d = new Date(u["date"]).getTime();
+        const [m1, d1, y1] = q.value.split("-")[0].trim().split("/");
+
+        const [m2, d2, y2] = q.value.split("-")[1].trim().split("/");
+
+        const r1 = Date.parse(`${y1}-${m1}-${d1}`);
+        const r2 = Date.parse(`${y2}-${m2}-${d2}`);
+        const d = Date.parse(u["date"].split("T")[0]);
+
         if (d > r2 || d < r1) flag = false;
       } else if (`${u[q.name]}`.toLowerCase() !== `${q.value}`.toLowerCase())
         flag = false;
     });
+
     if (flag) res.push(u);
   });
 
@@ -483,6 +490,7 @@ const showAlert = async function (message, flag = true) {
 const navHandler = function (e) {
   e.preventDefault();
 
+  clearSearch();
   const action = this.dataset.action;
 
   if (action === "add" && active === "add") return;
