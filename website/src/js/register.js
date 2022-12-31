@@ -15,7 +15,7 @@ const showAlert = async function (message, flag = true) {
     alert.classList.toggle("alert-hide");
     alert.classList.toggle(`${flag ? "alert-success" : "alert-danger"}`);
     alert.textContent = "";
-  }, 3000);
+  }, 2000);
 };
 
 (() => {
@@ -61,12 +61,12 @@ const showAlert = async function (message, flag = true) {
     }
 
     showAlert(
-      "Registration completed successfully,redirecting you to login page"
+      "Registration completed successfully, redirecting you to login page"
     );
 
     setTimeout(() => {
       window.location = `${SERVER_URL}/logIn`;
-    }, 3100);
+    }, 2200);
   });
 })();
 
@@ -92,4 +92,4 @@ document.querySelector("footer").innerHTML = `
 
 document
   .querySelector(".btn-outline-primary")
-  .addEventListener("click", () => (window.location = `${SERVER_URL}/logIn`));
+  .addEventListener("click", () => (window.location = `${SERVER_URL}/`));

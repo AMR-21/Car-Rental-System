@@ -410,3 +410,15 @@
 .gap {
   column-gap: 6.4rem;
 }
+
+.btn.btn-signout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.welcome {
+  margin-right: 1.2rem;
+  text-align: right;
+  font-weight: 600;
+}

@@ -50,6 +50,37 @@ connection.connect((err) => {
   }
 });
 
+connection.query(
+  `select * 
+  from reservations Natural Join car  
+  where res_status = 'active' and status = 'reserved'`,
+  (err, rows) => {
+    try {
+      if (err) throw err;
+
+      rows.forEach((res) => {
+        const pick = new Date(res.pick_date);
+        const today = new Date();
+        const period = Math.ceil((today - pick) / (1000 * 60 * 60 * 24));
+
+        if (period > 3) {
+          connection.query(`
+        Update reservations
+        set res_status = 'revoked'
+        where res_id = "${res.res_id}";
+
+        Update car
+        set status = 'active'
+        where car_id = "${res.car_id}";
+        `);
+        }
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+);
+
 const getId = function () {
   return uuid().split("-").join("").slice(0, 10);
 };
@@ -159,6 +190,7 @@ app.post("/signIn", function (request, response) {
       request.session.loggedin = true;
       request.session.userId = rows[0].customer_id;
       request.session.name = rows[0].fname;
+
       connection.query(
         `select count(res_id) as resNo from reservations where customer_id="${request.session.userId}" and res_status = "active";`,
         (err, rows) => {
@@ -312,7 +344,7 @@ app.get("/data", (request, response) => {
           ),
           filters,
         };
-        response.json(data);
+        response.json({ data, name: request.session.name });
       } catch (error) {
         response.status(500);
         response.send("Error in database");

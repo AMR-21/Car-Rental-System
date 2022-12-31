@@ -34,7 +34,11 @@ let active = "home",
 const init = async () => {
   const countries = await model.getCountries();
   filterView.initUI(countries);
-  await model.getData();
+  const name = await model.getData();
+
+  document.querySelector(".welcome").textContent = `Welcome back, ${
+    name[0].toUpperCase() + name.slice(1).toLowerCase()
+  }!`;
 
   carsView.render(model.state.cars, model.state.favourites);
   carsView.handle();
@@ -63,7 +67,7 @@ const init = async () => {
   pick.addEventListener("input", () => {
     drop.min = pick.value;
     const date = new Date(pick.value);
-    date.setDate(date.getDate() + 30);
+    date.setDate(date.getDate() + 45);
 
     //prettier-ignore
     const max = `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2,"0")}-${`${date.getDate()}`.padStart(2,"0")}`;

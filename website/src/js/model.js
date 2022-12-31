@@ -288,7 +288,9 @@ export const addCar = async function (data) {
 export const getData = async () => {
   try {
     const res = await fetch(`${SERVER_URL}/data`);
-    const data = await res.json();
+    const resData = await res.json();
+    const data = resData.data;
+    const name = resData.name;
 
     if (!res.ok) {
       const mes = await res.text();
@@ -305,7 +307,7 @@ export const getData = async () => {
     sortCars("reserved");
     sortCars("rented");
     sortCars();
-    return true;
+    return name;
   } catch (e) {
     console.error(e);
     return false;
@@ -521,7 +523,7 @@ export const reserveCar = async function (data, flag) {
       (1000 * 60 * 60 * 24)
   );
 
-  if (period < 0 || period > 30)
+  if (period < 0 || period > 45)
     return [false, "Period must be between 1 and 30 days"];
 
   const date = new Date();
