@@ -198,7 +198,7 @@ app.post("/signIn", function (request, response) {
             if (err) throw err;
             if (rows.length === 0) throw new Error();
 
-            request.session.limit = process.env.userLimit - rows[0].resNo;
+            request.session.limit = process.env.USERLIMIT - rows[0].resNo;
             response.sendStatus(200);
           } catch (error) {
             console.log(error);
@@ -1032,6 +1032,6 @@ app.post("/daily", (request, response) => {
 
 // Setup Server
 
-const server = app.listen(process.env.port, () =>
-  console.log(`Server is running on localhost: ${process.env.port}`)
+const server = app.listen(process.env.PORT, () =>
+  console.log(`Server is running on localhost: ${process.env.PORT}`)
 );
