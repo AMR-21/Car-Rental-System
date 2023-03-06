@@ -4,8 +4,8 @@
   "description": "",
   "default": "home.html",
   "scripts": {
-    "start": "parcel website/src/html/home.html",
-    "build": "parcel build  ./website/src/html/*.html --public-url ./ --dist-dir ./app"
+    "start": "parcel public/src/html/home.html",
+    "build": "parcel build  ./public/src/html/*.html --public-url ./ --dist-dir ./app"
   },
   "author": "",
   "license": "ISC",

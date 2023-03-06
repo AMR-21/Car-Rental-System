@@ -33,10 +33,10 @@ const addCCA = (data) => {
 init();
 
 const connection = mysql.createConnection({
-  host: process.env.host,
-  user: process.env.user,
-  database: process.env.database,
-  password: process.env.password,
+  host: process.env.MYSQLHOST,
+  user: process.env.MYSQLUSER,
+  database: process.env.MYSQLDATABASE,
+  password: process.env.MYSQLPASSWORD,
   multipleStatements: true,
   dateStrings: true,
 });
