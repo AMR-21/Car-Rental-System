@@ -1,7 +1,7 @@
 # 🚗 Car Rental System 🚗
 
 <p align="center" width="100%">
-<img src="website/src/imgs/fac-ico.webp" height="200px" width="200px">
+<img src="public/src/imgs/fac-ico.webp" height="200px" width="200px">
 </p>
 
 This project is a comprehensive car rental solution built using core web techonolgies and Node.js. The system provides a platform for managing all aspects of car rentals, from the reservation process to the administration of car inventory and customer information.
