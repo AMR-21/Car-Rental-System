@@ -4,13 +4,14 @@
   "description": "",
   "default": "home.html",
   "scripts": {
-    "start": "parcel public/src/html/home.html",
-    "build": "parcel build  ./public/src/html/*.html --public-url ./ --dist-dir ./app"
+    "start": "parcel public/html/home.html",
+    "build": "parcel build  ./public/html/*.html --public-url ./ --dist-dir ./app"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@popperjs/core": "^2.11.6",
+    "axios": "^1.3.4",
     "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.6",
     "core-js": "^3.26.1",

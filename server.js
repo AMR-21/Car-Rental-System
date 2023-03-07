@@ -3,14 +3,15 @@ let countries;
 const mysql = require("mysql");
 const session = require("express-session");
 const path = require("path");
+const axios = require("axios");
 const { v4: uuid } = require("uuid");
-require("dotenv").config();
+require("dotenv").config({ path: "./config.env" });
 
 const init = async () => {
   try {
-    const res = await fetch(`https://restcountries.com/v3.1/all`);
-    const data = await res.json();
-    countries = data;
+    const res = await axios("https://restcountries.com/v3.1/all");
+
+    countries = res.data;
   } catch (e) {
     console.log(e);
   }
@@ -33,8 +34,10 @@ const addCCA = (data) => {
 init();
 
 const connection = mysql.createConnection({
-  host: process.env.MYSQLHOST,
+  // host: process.env.MYSQLHOST,
+  host: "localhost",
   user: process.env.MYSQLUSER,
+  port: process.env.MYSQLPORT,
   database: process.env.MYSQLDATABASE,
   password: process.env.MYSQLPASSWORD,
   multipleStatements: true,
@@ -1031,7 +1034,7 @@ app.post("/daily", (request, response) => {
 });
 
 // Setup Server
-
-const server = app.listen(process.env.PORT, () =>
-  console.log(`Server is running on localhost: ${process.env.PORT}`)
+const port = process.env.PORT || 3000;
+const server = app.listen(port, () =>
+  console.log(`Server is running on localhost: ${port}`)
 );

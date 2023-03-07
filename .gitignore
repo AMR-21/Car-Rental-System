@@ -10,3 +10,4 @@ keys
 .terraform
 providers
 random_data.js
+config.env

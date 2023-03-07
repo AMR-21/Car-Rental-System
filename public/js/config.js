@@ -1,4 +1,4 @@
-export const SERVER_URL = "http://localhost:8000";
+export const SERVER_URL = "";
 
 export const CAR_HEAD = `
             <th class="table-field">#</th>
