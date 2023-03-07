@@ -34,8 +34,7 @@ const addCCA = (data) => {
 init();
 
 const connection = mysql.createConnection({
-  // host: process.env.MYSQLHOST,
-  host: "localhost",
+  host: process.env.MYSQLHOST,
   user: process.env.MYSQLUSER,
   port: process.env.MYSQLPORT,
   database: process.env.MYSQLDATABASE,
