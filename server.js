@@ -1,6 +1,6 @@
 let countries;
 
-const mysql = require("mysql");
+const mysql = require("mysql2");
 const session = require("express-session");
 const path = require("path");
 const axios = require("axios");
@@ -43,12 +43,14 @@ const connection = mysql.createConnection({
   dateStrings: true,
 });
 
+// console.log(connection);
+
 connection.connect((err) => {
   try {
     if (err) throw err;
     console.log("Connected!");
   } catch (e) {
-    console.log(e);
+    console.log(e.message);
   }
 });
 
