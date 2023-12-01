@@ -4,6 +4,8 @@
 <img src="public/imgs/fac-ico.webp" height="200px" width="200px">
 </p>
 
+*Spoiler: Backend is dump on purpose*
+
 This project is a comprehensive car rental solution built using core web techonolgies and Node.js. The system provides a platform for managing all aspects of car rentals, from the reservation process to the administration of car inventory and customer information.
 
 With a user-friendly interface and real-time updates, the application makes it easy for users to search for available cars and make reservations. The admin panel, on the other hand, gives the user full control over the rental process and provides a comprehensive interface for managing the car inventory, rental transactions, and customer information.
